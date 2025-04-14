@@ -10,13 +10,7 @@ public:
             [this](std_msgs::msg::String::SharedPtr msg) {
                 RCLCPP_INFO(this->get_logger(), "Node2 heard: '%s'", msg->data.c_str());
             });
-        timer_ = this->create_wall_timer(std::chrono::seconds(1),
-                                         [this]() {
-                                             std_msgs::msg::String msg;
-                                             msg.data = "Hello I am node2";
-                                             publisher_->publish(msg);
-                                             RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", msg.data.c_str());
-                                         });
+       
     }
 
 private:

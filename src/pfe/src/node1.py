@@ -3,26 +3,40 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 
+import threading
+import tkinter as tk
+
 class Node1(Node):
     def __init__(self):
         super().__init__('node1')
         self.publisher_ = self.create_publisher(String, 'chatter', 10)
-        self.subscription = self.create_subscription(String, 'chatter', self.listener_callback, 10)
-        self.timer = self.create_timer(1.0, self.publish_msg)
+        # Start UI in a new thread so it doesn't block the ROS event loop
+        ui_thread = threading.Thread(target=self.init_ui)
+        ui_thread.daemon = True
+        ui_thread.start()
 
-    def publish_msg(self):
+    def on_button_click(self):
         msg = String()
-        msg.data = 'Hello I am node1'
+        msg.data = ' 🟢 Button clicked!'
         self.publisher_.publish(msg)
-        self.get_logger().info(f'Publishing: "{msg.data}"')
+        #self.get_logger().info('🟢 Button was clicked — Published: "Button clicked!"')
 
-    def listener_callback(self, msg):
-        self.get_logger().info(f'Node1 heard: "{msg.data}"')
+    def init_ui(self):
+        root = tk.Tk()
+        root.title("Node1 UI")
+
+        button = tk.Button(root, text="Send Message", command=self.on_button_click, padx=20, pady=10)
+        button.pack(pady=20)
+
+        root.mainloop()
 
 def main(args=None):
     rclpy.init(args=args)
     node = Node1()
-    rclpy.spin(node)
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
     node.destroy_node()
     rclpy.shutdown()
 

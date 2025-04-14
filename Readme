@@ -1,0 +1,94 @@
+# Project Setup and Usage Guide (ROS 2)
+
+## 📦 Project Structure
+
+```
+workspace/
+├── src/
+│   └── pfe/
+│       ├── launch/
+│       │   └── launch_nodes.py
+│       ├── src/
+│       │   ├── node1.py       # Python node
+│       │   └── node2.cc       # C++ node
+│       ├── CMakeLists.txt
+│       └── package.xml
+├── install/
+├── build/
+└── log/
+```
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Clean Previous Builds (Optional but recommended)
+```bash
+rm -rf build/ install/ log/
+```
+
+### 2. Build the Workspace
+```bash
+colcon build --packages-select pfe
+```
+
+### 3. Source the Environment
+```bash
+source install/setup.bash
+```
+
+### 4. Run Nodes via Launch File
+```bash
+ros2 launch pfe launch_nodes.py
+```
+
+---
+
+## 💡 Notes
+
+### Python Nodes
+- Python nodes (like `node1.py`) must:
+  - Have executable permissions: `chmod +x src/node1.py`
+  - Start with a shebang: `#!/usr/bin/env python3`
+- Installed as scripts via `install(PROGRAMS ...)`
+- Accessed using just the name (`node1`) in launch files, not `node1.py`
+
+### C++ Nodes
+- Compiled using `add_executable()` and installed via `install(TARGETS ...)`
+- Executables named exactly as defined in CMake (e.g., `node2`)
+
+---
+
+## 🛠 Troubleshooting
+
+- If changes to code don’t appear:
+  1. Clean build folders
+  2. Rebuild
+  3. Re-source the environment
+
+```bash
+rm -rf build/ install/ log/
+colcon build --packages-select pfe
+source install/setup.bash
+```
+
+- Missing node error?
+  - Ensure it's installed to `lib/${PROJECT_NAME}`
+  - Check `CMakeLists.txt` for proper `install()` section
+
+---
+
+## ✅ To Add a New Node
+
+### Python Node
+1. Add script to `src/`
+2. Add to `install(PROGRAMS ...)` in `CMakeLists.txt`
+3. Make it executable and include shebang
+4. Rebuild and re-source
+
+### C++ Node
+1. Add `.cc` file to `src/`
+2. Use `add_executable()` and `ament_target_dependencies()`
+3. Install with `install(TARGETS ...)`
+4. Rebuild and re-source
+

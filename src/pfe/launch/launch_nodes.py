@@ -5,7 +5,7 @@ def generate_launch_description():
     return LaunchDescription([
         Node(
             package='pfe',
-            executable='node1',
+            executable='node1.py',
             name='node1',
             output='screen'
         ),
