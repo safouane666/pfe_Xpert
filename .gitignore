@@ -1,0 +1,19 @@
+# ROS 2 Colcon build files
+build/
+install/
+log/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# VSCode & JetBrains IDEs
+.vscode/
+.idea/
+
+# Mac & Linux metadata
+.DS_Store
+
+# Python virtualenv
+venv/
+.env/

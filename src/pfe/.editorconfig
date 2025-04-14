@@ -1,0 +1,8 @@
+# Place this file in the **root** of your ROS 2 package (or root of the workspace)
+# Example: ~/workspace/src/pfe/.editorconfig
+
+[*]
+end_of_line = lf
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
